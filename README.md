@@ -1,2 +1,16 @@
-# BD_PROGETTO2_RAG-ROS-Helper
-A RAG System created to help and make access to ROS documentation easier
+# <div align="center"> DIAMind: A RAG System for Computer Engineering students </div>
+The following project is a RAG system developed by me and my colleague [Matteo Vitale](https://github.com/MatVitale6) as a second project for the Big Data course.
+
+## Projcet Description
+A RAG (Retrieval-Augmented Generation) system is an artificial intelligence-based architecture that combines the retrieval of information from a knowledge base with the generation of natural language responses, providing contextual, accurate and up-to-date answers even on very specific topics. Our RAG system has been designed to collect, organise and make available all teaching materials – notes, handouts, exam questions, codes and documentation – relating to courses at the Department of Computer Engineering and Automation at Roma Tre University, for both bachelor's and master's degrees. Through the integration of semantic retrieval techniques and advanced linguistic models, the system is able to answer questions in natural language posed by students, offering intelligent support for studying, exam preparation and searching for specific content in course programmes. The goal is to create a reliable, up-to-date virtual assistant that is perfectly aligned with the educational path offered by the University.
+
+## Hou to Install and Use
+...
+
+## Authors
+<a href="https://github.com/AntonioSouls">
+  <img src="https://github.com/AntonioSouls.png" width="80">
+</a>
+<a href="https://github.com/MatVitale6">
+  <img src="https://github.com/MatVitale6.png" width="80">
+</a>
