@@ -16,3 +16,11 @@ Our RAG system has been designed to collect, organise and make available all tea
 <a href="https://github.com/MatVitale6">
   <img src="https://github.com/MatVitale6.png" width="80">
 </a>
+
+
+## Comandi utili per lavorare (Sezione temporanea. Ci serve solo per permettere a me e Matteo di lavorare in maniera pulita)
+- **source venv/bin/activate** -> Attivare l'ambiente virtuale in locale\
+- **deactivate** -> Disattivare l'ambiente virtuale in locale\
+- **pip freeze > requirements.txt**  -> Per aggiornare il requirements.txt ogni volta che in locale installiamo nuove librerie\
+- **pip install -r requirements.txt** -> Per installare tutte le librerie aggiunte dal collega nel suo ambiente virtuale, in modo che i due ambienti siano sempre allineati\
+- **pip list** -> Eseguito dentro al venv permette di vedere sul terminale tutte le librerie installate in quell'ambiente virtuale. Se eseguito fuori dal venv, ti permette di visualizzare le librerie installate sul tuo sistema
