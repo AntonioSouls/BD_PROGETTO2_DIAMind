@@ -9,13 +9,20 @@ Our RAG system has been designed to collect, organise and make available all tea
 ## Hou to Install and Use
 ...
 
-## Authors
+## 📜 Authors & License
 <a href="https://github.com/AntonioSouls">
   <img src="https://github.com/AntonioSouls.png" width="80">
 </a>
 <a href="https://github.com/MatVitale6">
   <img src="https://github.com/MatVitale6.png" width="80">
 </a>
+
+This project is publicly accessible and can be freely viewed, but **all rights are reserved**.  
+Copying, modifying, distributing, or reusing the code is **not permitted without written permission**.
+
+© 2025 Antonio Lanza, Matteo Vitale. All Rights Reserved.
+
+
 
 
 ## Comandi utili per lavorare (Sezione temporanea. Ci serve solo per permettere a me e Matteo di lavorare in maniera pulita)
