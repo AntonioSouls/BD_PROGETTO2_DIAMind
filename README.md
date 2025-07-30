@@ -6,7 +6,7 @@ A **RAG** (*Retrieval-Augmented Generation*) **system** is an artificial intelli
 
 Our RAG system has been designed to collect, organise and make available all teaching materials – notes, handouts, exam questions, codes and documentation – relating to courses at the Department of Computer Engineering and Automation at Roma Tre University, for both bachelor's and master's degrees. Through the integration of semantic retrieval techniques and advanced linguistic models, the system is able to answer questions in natural language posed by students, offering intelligent support for studying, exam preparation and searching for specific content in course programmes. The goal is to create a reliable, up-to-date virtual assistant that is perfectly aligned with the educational path offered by the University.
 
-## Hou to Install and Use
+## How to Install and Use
 ...
 
 ## 📜 Authors & License
