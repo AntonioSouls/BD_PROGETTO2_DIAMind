@@ -6,7 +6,7 @@ manualmente lo si va a sistemare """
 
 
 base_dir = "Data/Raw"    # Directory su cui lavorare
-PATTERN = re.compile(r'!\[[^\]]*\]\(([^)]+)\)')  # prende esattamente il contenuto del tipo ![ ... ]( ... )
+PATTERN = re.compile(r'\[[^\]]*\]\(([^)]+)\)')  # prende esattamente il contenuto del tipo ![ ... ]( ... )
 
 def main():
     entries = os.listdir(base_dir)           # Lista di tutti i file contenuti nella directory (ci serve per selezionare i file da analizzare)
