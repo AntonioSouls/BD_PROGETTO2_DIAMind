@@ -4,10 +4,12 @@ import re
 """ Script che controlla che tutti i riferimenti all'interno dei Raw file.md siano corretti. Se ce n'è qualcuno rotto, lo segnala in console e
 manualmente lo si va a sistemare """
 
+# === VARIABILI DI CONFIGURAZIONE === 
+base_dir = "Data/Raw"                           # Directory su cui lavorare
+PATTERN = re.compile(r'\[[^\]]*\]\(([^)]+)\)')  # Prende esattamente il contenuto del tipo [ ... ]( ... )
 
-base_dir = "Data/Raw"    # Directory su cui lavorare
-PATTERN = re.compile(r'\[[^\]]*\]\(([^)]+)\)')  # prende esattamente il contenuto del tipo [ ... ]( ... )
 
+# === FUNZIONE PRINCIPALE ===
 def main():
     entries = os.listdir(base_dir)           # Lista di tutti i file contenuti nella directory (ci serve per selezionare i file da analizzare)
     files_in_dir = set(entries)              # Insieme di tutti i file contenuti nella directory (ci serve per fare un confronto più veloce quando troviamo i riferimenti)
@@ -38,6 +40,6 @@ def main():
             print(f"- In '{md_file}': riferimento non trovato -> ({bad})")
 
 
-# Funzione starter dello script
+# === FUNZIONE STARTER DELLO SCRIPT ===
 if __name__ == "__main__":
     main()
