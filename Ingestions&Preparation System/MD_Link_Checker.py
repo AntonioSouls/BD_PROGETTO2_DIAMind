@@ -1,12 +1,12 @@
 import os
 import re
 
-""" Script che controlla che tutti i riferimenti all'interno dei file.md siano corretti. Se ce n'è qualcuno rotto, lo segnala in console e
+""" Script che controlla che tutti i riferimenti all'interno dei Raw file.md siano corretti. Se ce n'è qualcuno rotto, lo segnala in console e
 manualmente lo si va a sistemare """
 
 
 base_dir = "Data/Raw"    # Directory su cui lavorare
-PATTERN = re.compile(r'\[[^\]]*\]\(([^)]+)\)')  # prende esattamente il contenuto del tipo ![ ... ]( ... )
+PATTERN = re.compile(r'\[[^\]]*\]\(([^)]+)\)')  # prende esattamente il contenuto del tipo [ ... ]( ... )
 
 def main():
     entries = os.listdir(base_dir)           # Lista di tutti i file contenuti nella directory (ci serve per selezionare i file da analizzare)
@@ -23,12 +23,13 @@ def main():
                 print(f"⚠️ Impossibile leggere {filename}: {e}")
                 continue
 
-            # Cerca tutti i pattern ![...](...)
+            # Cerca tutti i pattern [...](...) nel file
             for m in PATTERN.finditer(text):
-                target = m.group(1)
+                target = m.group(1)                  # Per ogni pattern nel file, seleziona solamente la parte dentro (...)
                 if target not in files_in_dir:
-                    broken.append((filename, target))
+                    broken.append((filename, target))   # Se il link selezionato non è nell'elenco dei file in Raw, allora lo aggiungo all'elenco di quelli rotti
     
+    # Stampo tutti i link rotti, se ce ne sono
     if not broken:
         print("✅ Nessun riferimento rotto trovato nei .md di Data/Raw.")
     else:
