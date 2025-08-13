@@ -5,10 +5,15 @@ import subprocess
 """ Script python che converte dei PDF contenenti un'immagine singola in formato PNG usando ImageMagick """
 
 
+# == VARIABILI GLOBALI ======================================================================================================================
 base_dir = "Data/Raw"   # Directory di partenza
 
-# == CONVERTITORE DA PDF A PNG ==
+
+# == SEZIONE PER IL CODICE ==================================================================================================================
+
+
 def convert_pdfs_to_pngs():
+    """ CONVERTITORE DA PDF A PNG """
     for file in os.listdir(base_dir):
         if file.lower().endswith(".pdf"):
             pdf_path = os.path.join(base_dir, file)
@@ -26,7 +31,7 @@ def convert_pdfs_to_pngs():
                 print(f"❌ Errore nella conversione di {pdf_path}: {e}")
 
 
-# == FUNZIONE STARTER DELLO SCRIPT ==
 if __name__ == "__main__":
+    """ STARTER DELLO SCRIPT """
     convert_pdfs_to_pngs()
     print("CONVERSIONE DEI PDF IN PNG COMPLETATA!")

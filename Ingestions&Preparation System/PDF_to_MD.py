@@ -10,14 +10,15 @@ from typing import Optional
 """ Script per convertire i PDF puri (no scansioni) in formato .md che è più gestibile per l'embeddizzazione """
 
 
-# === CONFIG ===
+# === CONFIG ================================================================================================================================
 base_dir = "Data/Raw"    # Directory su cui lavorare
 OVERWRITE = False        # Se False, non sovrascrive .md esistenti
 
 
+# === SEZIONE PER IL CODICE =================================================================================================================
 
-# === FUNZIONE CHE OPERA UNA PULIZIA BASILARE DEL TESTO ESTRATTO DAL PDF ===
 def clean_text(s: str) -> str:
+    """ FUNZIONE CHE OPERA UNA PULIZIA BASILARE DEL TESTO ESTRATTO DAL PDF """
     if not s:
         return ""
     s = s.replace("\u00ad", "")            # soft hyphen
@@ -25,8 +26,11 @@ def clean_text(s: str) -> str:
     s = re.sub(r"\n{3,}", "\n\n", s)       # troppe righe vuote
     return s.strip()
 
-# === FUNZIONE CHE SALVA UN PIXMAP GESTENDO CMYK/ALPHA -> RGB ===
+
+
 def save_pixmap(pix: fitz.Pixmap, out_path: str):
+
+    """ FUNZIONE CHE SALVA UN PIXMAP GESTENDO CMYK/ALPHA -> RGB """
     try:
         if pix.n > 4:  # CMYK o con alpha
             pix = fitz.Pixmap(fitz.csRGB, pix)
@@ -37,8 +41,11 @@ def save_pixmap(pix: fitz.Pixmap, out_path: str):
         except Exception:
             pass
 
-# === FUNZIONE CHE CONVERTE UN SINGOLO PDF PURO IN .md + CARTELLA IMMAGINI ===
+
+
 def convert_pdf_to_md(pdf_path: str):
+    """ FUNZIONE CHE CONVERTE UN SINGOLO PDF PURO IN .md + CARTELLA IMMAGINI """
+    
     pdf_dir = os.path.dirname(pdf_path)
     pdf_name = os.path.basename(pdf_path)
     stem, _ = os.path.splitext(pdf_name)
@@ -101,8 +108,11 @@ def convert_pdf_to_md(pdf_path: str):
     except Exception as e:
         print(f"[ERR] Scrittura {md_path} fallita: {e}")
 
-# === FUNZIONE CHE ORCHESTRA TUTTE LE OPERAZIONI UTILI PER LA CONVERSIONE ===
+
+
 def main():
+    """ FUNZIONE CHE ORCHESTRA TUTTE LE OPERAZIONI UTILI PER LA CONVERSIONE """
+
     counter_pdf = 0
     for filename in os.listdir(base_dir):
         if filename.endswith(".pdf"):
@@ -117,8 +127,6 @@ def main():
 
 
 
-
-
-# === FUNZIONE STARTER DELLO SCRIPT ===
 if __name__ == "__main__":
+    """ FUNZIONE STARTER DELLO SCRIPT """
     main()
