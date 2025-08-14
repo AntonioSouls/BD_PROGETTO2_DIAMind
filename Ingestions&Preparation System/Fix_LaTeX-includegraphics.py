@@ -15,8 +15,10 @@ INCLUDEGFX_RE = re.compile(
 
 # == SEZIONE PER IL CODICE ======================================================================================================================================
 
-# FUNZIONE PER MODIFICARE IL FILE LATEX EFFETTUANDO LA CONVERSIONE
+
 def replace_pdf_with_png_in_includegraphics(tex_content):
+    """ FUNZIONE PER MODIFICARE IL FILE LATEX EFFETTUANDO LA CONVERSIONE """
+
     def _repl(m):
         prefix, inner, suffix = m.groups()
 
@@ -34,8 +36,9 @@ def replace_pdf_with_png_in_includegraphics(tex_content):
 
     return INCLUDEGFX_RE.sub(_repl, tex_content)
 
-# FUNZIONE PER PROCESSARE IL SINGOLO FILE LATEX
+
 def process_tex_file(path, dry_run=False, make_backup=True, encoding='utf-8'):
+    """ FUNZIONE PER PROCESSARE IL SINGOLO FILE LATEX """
     
     # Apro il file in lettura
     with open(path, 'r', encoding=encoding) as f:
@@ -62,13 +65,17 @@ def process_tex_file(path, dry_run=False, make_backup=True, encoding='utf-8'):
     else:
         print(f"  - Nessuna sostituzione necessaria ✔️")
 
-# FUNZIONE PER ITERARE SU TUTTI I FILE LATEX
+
 def main():
+    """ FUNZIONE PER ITERARE SU TUTTI I FILE LATEX """
+
     for file in os.listdir(base_dir):
         if file.endswith(".tex"):
             print(f"➡️ Processamento del file {file}")
             process_tex_file(os.path.join(base_dir,file))
 
-# FUNZIONE STARTER DELLO SCRIPT
+
 if __name__ == '__main__':
+    """ FUNZIONE STARTER DELLO SCRIPT """
+
     main()
