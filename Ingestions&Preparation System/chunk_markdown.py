@@ -247,7 +247,7 @@ def process_md_file(md_path: Path, out_jsonl_handle, csv_writer, base_root: Path
     text = md_path.read_text(encoding="utf-8", errors="ignore")       # Leggo il testo del file
     text = normalize(text)                                            # Chiamo la funzione per normalizzare il testo
     doc_id = md_path.stem                                             # Calcolo l'ID del file che sto analizzando semplicemente considerando il nome del file senza estensione
-    rel_src = str(md_path.relative_to(base_root))                     # Calcolo il path relativo del file 
+    rel_src = f"BD_PROGETTO2_DIAMind/{md_path}"                     # Calcolo il path assoluto del file 
 
     sections = split_sections(text)                                   # Divido il testo del file in sezioni
     n_chunks_file = 0
