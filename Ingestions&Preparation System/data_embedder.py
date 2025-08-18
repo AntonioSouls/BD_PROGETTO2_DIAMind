@@ -5,7 +5,11 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import faiss         # import del VectorDB (FAISS nel nostro caso)
-from DIAMind  import embedding_model  # Import dell'embedder
+import sys
+ROOT = Path(__file__).resolve().parents[1]   # Risolvo la root del progetto per far funzionare l'import dell'embedder
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from DIAMind import embedding_model  # Import dell'embedder
 
 
 """ Script che prende i Chunk generati, li passa al modello di embedding, riceve i dati embeddizzati e li salva sul VectorDB """
@@ -14,9 +18,7 @@ from DIAMind  import embedding_model  # Import dell'embedder
 # === VARIABILI DI CONFIGURAZIONE =========================================================================================================================
 INPUT_JSONL = "Data/Chunks/chunks.jsonl"
 OUT_DIR     = "Data/VectorDB"
-#BATCH_EMB   = 128         # batch di embedding
-#NORMALIZE   = True        # True => usa IndexFlatIP come cosine
-MIN_TOKENS  = 0           # OPZIONALE: Se posta a 0 accetta tutti i chunk. Se aumentata di valore rifiuta tutti i chunk con un numero di token sotto la soglia definita
+NORMALIZE   = True         # La teniamo a TRUE perchè normalizza i vettori che vengono creati. Così facendo non ci sono vettori che vengono favoriti rispetto ad altri nel retrieval
 
 
 # === SEZIONE PER IL CODICE ===============================================================================================================================
@@ -25,7 +27,6 @@ MIN_TOKENS  = 0           # OPZIONALE: Se posta a 0 accetta tutti i chunk. Se au
 def sha1(s: str) -> str:
     """ Funzione che calcola l’hash SHA-1 di una stringa e lo restituisce in formato esadecimale."""
 
-    import hashlib
     return hashlib.sha1(s.encode("utf-8")).hexdigest()
 
 
@@ -61,12 +62,8 @@ def main():
     data = load_chunks(INPUT_JSONL)          # Carica dallo storage tutti i chunk    
     texts, metas = [], []                    # Inizializzo le variabili in cui memorizzare i record validi
     
-    for r in data:
-        # Istruzione inserita se volessimo embeddizzare solo i chunk con un numero di token sopra una certa soglia.
-        # Cambiando il valore alla variabile MIN_TOKENS, si entra nel corpo di questa istruzione che rifiuta tutti i chunk sotto la soglia stabilita
-        # da quella variabile
-        if MIN_TOKENS and (r.get("n_tokens") or 0) < MIN_TOKENS:
-            continue
+    print("Estrazione del testo embeddizzabile dai chunk ed elaborazione dei metadati ...")
+    for r in tqdm(data):
         t = build_input_text(r)                 # Dato un singolo chunk, estrapolo da questo solo il testo da embeddizzare
         if not t:
             continue
@@ -86,25 +83,24 @@ def main():
 
     # Piccolo controllo per segnalare l'eventuale errore di assenza di testi da embeddizzare
     if not texts:
-        print("Nessun testo valido da indicizzare.")
+        print("‼️ ERRORE: Nessun testo valido da embeddizzare trovato. Ricontrollare i chunk!")
         return
+    print("✅ Estrazione del testo embeddizzabile completata!")
 
-    # Embedding a batch usando lo script riusabile
-    vec_parts = []
-    for i in tqdm(range(0, len(texts), BATCH_EMB), desc="Embedding"):
-        batch = texts[i:i+BATCH_EMB]
-        Vb = embed_many(batch, batch_size=min(64, BATCH_EMB), normalize=True if NORMALIZE else False)
-        vec_parts.append(Vb.astype("float32"))
-    V = np.vstack(vec_parts)  # [N, 384]
-    dim = V.shape[1]
+    print("Inizio Embeddizzazione ...")
+    Vb = embedding_model.embed_many(texts, batch_size=64, normalize=NORMALIZE)     # Passo i testi estratti all'Embedding Model che ne calcola gli embeddings. Batch_size ci dice quanti testi in parallelo andiamo ad embeddizzare (64 è il valore ottimale per la mia CPU). Diciamo anche al modello di normalizzare i vettori
+    V = Vb.astype("float32", copy=False)                                           # Assicura che il dtype della matrice sia float32, che è quello atteso da FAISS. copy=False indica che non viene creata una copia della matrice se il dtype è già float32
+    dim = V.shape[1]                            # La matrice è del tipo [N,384] cioè N righe (che sono gli N embeddings creati) e 384 colonne (la lunghezza del singolo embeddings). Questa riga prende il numero di colonne e lo salva in una variabile. Utile per costruire l'indice FAISS
+    print("✅ Embeddizzazione completata!")
 
-    # FAISS index
+    print("Salvataggio degli embeddings ... ")
+    # Costruisco il FAISS index
     if NORMALIZE:
         index = faiss.IndexFlatIP(dim)     # IP su vettori normalizzati = cosine
     else:
         index = faiss.IndexFlatL2(dim)
 
-    # Se vuoi mantenere ID interi allineati alle righe meta:
+    # Mantengo ID interi allineati alle righe meta:
     # (IndexIDMap2 consente di mappare id interi -> vettori)
     id_index = faiss.IndexIDMap2(index)
     ids = np.arange(V.shape[0], dtype="int64")
@@ -116,6 +112,7 @@ def main():
     meta_df.to_parquet(Path(OUT_DIR) / "meta.parquet", index=False)
 
     # Info
+    print("✅ Salvataggio completato!")
     print(f"✔ Indicizzati {len(meta_df)} chunk, dim={dim}, normalize={NORMALIZE}")
     print(f"- {OUT_DIR}/index.faiss")
     print(f"- {OUT_DIR}/meta.parquet")
