@@ -8,7 +8,9 @@ from sentence_transformers import SentenceTransformer
 
 
 
+import torch
 MODEL = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")     # Modello che stiamo utilizzando
+MODEL.to(torch.device('cpu'))  # Forza l'uso della CPU
 
 
 def embed_text(text: str, normalize: bool = True) -> np.ndarray:
